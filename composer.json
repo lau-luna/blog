@@ -8,7 +8,10 @@
         "php": "^8.2",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
-        "xvladqt/faker-lorem-flickr": "^1.0"
+        "xvladqt/faker-lorem-flickr": "^1.0",
+        "doctrine/dbal": "~2.3|^3.3",
+        "phpdocumentor/graphviz": "^1.0",
+        "nikic/php-parser": "^2.0|^3.0|^4.0|^5.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -17,8 +20,7 @@
         "mmo/faker-images": "^0.9.0",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
-        "ottaviano/faker-gravatar": "^0.2.0",
-        "phpunit/phpunit": "^11.0.1"
+        "phpunit/phpunit": "^7.0| ^8.0|^9.5.10"
     },
     "autoload": {
         "psr-4": {
