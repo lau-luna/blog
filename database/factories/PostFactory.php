@@ -25,7 +25,7 @@ class PostFactory extends Factory
             'title' =>  $title,
             'slug' => Str::slug($title),
             'content' =>  fake()->realText(500),
-            'image' => 'posts/' . $faker->image('public/storage/posts', 640, 480, ['anime'], false)
+            'image' => 'posts/' . $faker->image('public/storage/posts', 640, 480, ['technology'], false)
         ];
     }
 }

@@ -20,8 +20,10 @@ class PruebasController extends Controller
     }
 
     public function testOrm(){
+        // Seleccionar todos los post
         $posts = Post::all();
         $posts->load('user'); // eager load the user relationship
+        $posts->load('category');
         return view('pruebas.post', compact('posts'));
         die();
     }
