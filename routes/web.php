@@ -15,16 +15,18 @@ use App\Http\Controllers\CategoryController;
     Route::get('/entrada/pruebas', [PostController::class, 'pruebas']);
 
     // Rutas del controlador de usuarios
-    Route::post('/api/register', [UserController::class, 'register']);
-    Route::post('/api/login', [UserController::class, 'login']);
+    Route::post('/api/register', [UserController::class, 'register'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
+    Route::post('/api/login',[UserController::class,'login'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
 
 
 
 
-/* Rutas de prueba 
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+/* Rutas de prueba 
 
 Route::get('/pruebas/{nombre?}', function($nombre = null ) {
 
