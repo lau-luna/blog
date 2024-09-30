@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\JwtAuth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -78,7 +79,9 @@ class UserController extends Controller
     }
 
     public function login(Request $request)
-    {
-        return "Acción de login de usuario";
+    {   
+        $jwtAuth = new JwtAuth();
+
+        return $jwtAuth->signup();
     }
 }

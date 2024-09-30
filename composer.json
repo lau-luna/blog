@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
@@ -11,7 +14,8 @@
         "xvladqt/faker-lorem-flickr": "^1.0",
         "doctrine/dbal": "~2.3|^3.3",
         "phpdocumentor/graphviz": "^1.0",
-        "nikic/php-parser": "^2.0|^3.0|^4.0|^5.0"
+        "nikic/php-parser": "^2.0|^3.0|^4.0|^5.0",
+        "firebase/php-jwt": "3.0.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -19,8 +23,7 @@
         "laravel/sail": "^1.26",
         "mmo/faker-images": "^0.9.0",
         "mockery/mockery": "^1.6",
-        "nunomaduro/collision": "^8.0",
-        "phpunit/phpunit": "^7.0| ^8.0|^9.5.10"
+        "phpunit/phpunit": "^9.5.10"
     },
     "autoload": {
         "psr-4": {
