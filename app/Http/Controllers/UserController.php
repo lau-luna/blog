@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\JwtAuth;
 use App\Models\User;
+use App\Helpers\JwtAuth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -47,7 +48,7 @@ class UserController extends Controller
                 // Validación pasada correctamente
 
                 // Cifrar la contraseña
-                $pwd = password_hash($params->password, PASSWORD_BCRYPT, ['cost' => 4]);
+                $pwd = hash('sha256', $params->password);
 
                 // Crear el usuario
                 $user = new User();
@@ -82,6 +83,12 @@ class UserController extends Controller
     {   
         $jwtAuth = new JwtAuth();
 
-        return $jwtAuth->signup();
+        $email = 'lautaroluna906@gmail.com'; 
+        $password = 'lau';
+        $pwd = hash('sha256', $password);
+
+        
+
+        return response()->json($jwtAuth->signup($email, $pwd, true), 200);
     }
 }
