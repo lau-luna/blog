@@ -18,7 +18,7 @@ use App\Http\Controllers\CategoryController;
     Route::post('/api/register', [UserController::class, 'register'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
     Route::post('/api/login', [UserController::class, 'login'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
     Route::PUT('/api/user/update', [UserController::class, 'update'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
-
+    Route::POST('/api/user/upload', [UserController::class, 'upload'])->withoutMiddleware('web', 'verifyCsrfToken');
 
 
 Route::get('/', function () {
