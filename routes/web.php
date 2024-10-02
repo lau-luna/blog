@@ -17,7 +17,7 @@ use App\Http\Controllers\CategoryController;
     // Rutas del controlador de usuarios
     Route::post('/api/register', [UserController::class, 'register'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
     Route::post('/api/login', [UserController::class, 'login'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
-
+    Route::post('/api/user/update', [UserController::class, 'update'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
 
 
 
