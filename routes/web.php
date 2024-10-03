@@ -21,6 +21,7 @@ use App\Http\Middleware\ApiAuthMiddleware;
         Route::post('/api/login', [UserController::class, 'login']);
         Route::put('/api/user/update', [UserController::class, 'update']);
         Route::get('/api/user/avatar/{filename}', [UserController::class, 'getImage']);
+        Route::get('/api/user/detail/{id}', [UserController::class, 'detail']);
     });
    
 
