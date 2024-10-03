@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Helpers\JwtAuth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -113,7 +115,7 @@ class UserController extends Controller
             // Devolver token o datos
             $signup = $jwtAuth->signup($params->email, $pwd);
 
-            if(isset($params->getToken)){
+            if (isset($params->getToken)) {
                 $signup = $jwtAuth->signup($params->email, $pwd, true);
             }
         }
@@ -121,8 +123,9 @@ class UserController extends Controller
         return response()->json($signup, 200);
     }
 
-    public function update(Request $request){
-        
+    public function update(Request $request)
+    {
+
         // Comprobar si el usuario esá identificado
         $token = $request->header('Authorization');
         $jwtAuth = new JwtAuth();
@@ -132,7 +135,7 @@ class UserController extends Controller
         $json = $request->input('json', null);
         $params_array = json_decode($json, true);
 
-        if($checkToken && !empty($params_array) ){
+        if ($checkToken && !empty($params_array)) {
 
             // Actualizar usuario
 
@@ -143,7 +146,7 @@ class UserController extends Controller
             $validate = Validator::make($params_array, [
                 'name'      => 'required|alpha',
                 'surname'   => 'required|alpha',
-                'email'     => 'required|email|unique:users,'.$user->sub
+                'email'     => 'required|email|unique:users,' . $user->sub
             ]);
 
             // Quitar los campos que no quiero actualizar
@@ -163,8 +166,7 @@ class UserController extends Controller
                 'user' => $user,
                 'changes' => $params_array
             );
-
-        }else {
+        } else {
             $data = array(
                 'code' => 400,
                 'status' => 'error',
@@ -175,13 +177,36 @@ class UserController extends Controller
         return response()->json($data, $data['code']);
     }
 
-    public function upload(Request $request){
+    public function upload(Request $request)
+    {
 
-        $data = array(
-            'code' => 400,
-            'status' => 'error',
-            'message' => 'Error al subir imagen'
-        );
+        // Recoger los datos de la petición
+        $image = $request->file('file0');
+
+        // Validación de la imagen
+        $validate = Validator::make($request->all(), [
+            'file0' => 'required|image|mimes:jpg,jpeg,png,gif'
+        ]);
+
+
+        // Guardar imagen
+        if (!$image || $validate->fails()) {
+            $data = array(
+                'code' => 400,
+                'status' => 'error',
+                'message' => 'Error al subir imagen'
+            );
+
+        } else {
+            $image_name = time() . $image->getClientOriginalName();
+            Storage::disk('users')->put($image_name, File::get($image));
+
+            $data = array(
+                'code'   => 200,
+                'status' => 'success',
+                'image'  => $image_name
+            );
+        }
 
         return response()->json($data, $data['code']);
     }

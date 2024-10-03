@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
     {
         //almacenamiento Eliminar y despues crear directorios
         Storage::deleteDirectory('users');
-        Storage::deleteDirectory('posts');
+        Storage::deleteDirectory('images');
 
         Storage::makeDirectory('users');
-        Storage::makeDirectory('posts');
+        Storage::makeDirectory('images');
 
       
         // Factories
