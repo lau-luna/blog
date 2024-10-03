@@ -7,11 +7,11 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PruebasController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Middleware\ApiAuthMiddleware;
+use App\Http\Middleware\ApiAuthMiddleware; 
 
 //Rutas del API
     // Rutas de prueba
-    Route::get('/usuario/pruebas', [UserController::class, 'pruebas']);
+    Route::get('/usuario/pruebas', [Usercontroller::class, 'pruebas']);
     Route::get('/categoria/pruebas', [CategoryController::class, 'pruebas']);
     Route::get('/entrada/pruebas', [PostController::class, 'pruebas']);
 
@@ -28,6 +28,12 @@ use App\Http\Middleware\ApiAuthMiddleware;
     Route::middleware([ApiAuthMiddleware::class])->group(function () {
         Route::post('/api/user/upload', [UserController::class, 'upload'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
     });
+
+    
+    //  Rutas del controlador de categorias
+    Route::withoutMiddleware([ApiAuthMiddleware::class])->group((function () {
+        Route::resource('/api/category', CategoryController::class);
+    }));
 
 
 Route::get('/', function () {
