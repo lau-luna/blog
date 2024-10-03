@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Helpers\JwtAuth;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -209,5 +210,23 @@ class UserController extends Controller
         }
 
         return response()->json($data, $data['code']);
+    }
+
+    public function getImage($filename){
+        $isset = Storage::disk('users')->exists($filename);
+
+        if ($isset) {
+            $file = Storage::disk('users')->get($filename);
+            return new Response($file, 200);
+        }else {
+            $data = array(
+                'code'   => 404,
+                'status' => 'success',
+                'message'  => 'La imagen no existe.'
+            );
+
+            return response()->json($data, $data['code']);  
+        }
+        
     }
 }
