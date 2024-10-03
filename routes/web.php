@@ -7,6 +7,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PruebasController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Middleware\ApiAuthMiddleware;
 
 //Rutas del API
     // Rutas de prueba
@@ -15,10 +16,16 @@ use App\Http\Controllers\CategoryController;
     Route::get('/entrada/pruebas', [PostController::class, 'pruebas']);
 
     // Rutas del controlador de usuarios
-    Route::post('/api/register', [UserController::class, 'register'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
-    Route::post('/api/login', [UserController::class, 'login'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
-    Route::PUT('/api/user/update', [UserController::class, 'update'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
-    Route::POST('/api/user/upload', [UserController::class, 'upload'])->withoutMiddleware('web', 'verifyCsrfToken');
+    Route::withoutMiddleware(['web', 'VerifyCsrfToken'])->group(function () {
+        Route::post('/api/register', [UserController::class, 'register']);
+        Route::post('/api/login', [UserController::class, 'login']);
+        Route::put('/api/user/update', [UserController::class, 'update']);
+    });
+   
+
+    Route::middleware([ApiAuthMiddleware::class])->group(function () {
+        Route::post('/api/user/upload', [UserController::class, 'upload'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
+    });
 
 
 Route::get('/', function () {
