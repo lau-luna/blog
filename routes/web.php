@@ -23,7 +23,6 @@ use App\Http\Middleware\ApiAuthMiddleware;
         Route::get('/api/user/avatar/{filename}', [UserController::class, 'getImage']);
         Route::get('/api/user/detail/{id}', [UserController::class, 'detail']);
     });
-   
 
     Route::middleware([ApiAuthMiddleware::class])->group(function () {
         Route::post('/api/user/upload', [UserController::class, 'upload'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
@@ -31,10 +30,21 @@ use App\Http\Middleware\ApiAuthMiddleware;
 
     
     //  Rutas del controlador de categorias
-    Route::middleware([ApiAuthMiddleware::class])->group((function () {
-        Route::resource('/api/category', CategoryController::class)->withoutMiddleware(['web', 'VerifyCsrfToken']);
-    }));
+    Route::middleware([ApiAuthMiddleware::class])->group(function () {
+        // Rutas con ApiAuthMiddleware para todas excepto index y show
+        Route::resource('/api/category', CategoryController::class)->except(['index', 'show']);
+    });
+    // Rutas sin ApiAuthMiddleware para index y show
+    Route::get('/api/category', [CategoryController::class, 'index']);
+    Route::get('/api/category/{id}', [CategoryController::class, 'show']);
 
+    // Rutas del controlador de entradas
+    Route::middleware([ApiAuthMiddleware::class])->group((function () {
+        Route::resource('/api/post', PostController::class)->except(['index', 'show']);
+    }));
+    // Rutas sin ApiAuthMiddleware para index y show
+    Route::get('/api/post', [PostController::class, 'index']);
+    Route::get('/api/post/{id}', [PostController::class, 'show']);
 
 Route::get('/', function () {
     return view('welcome');

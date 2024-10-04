@@ -197,7 +197,6 @@ class UserController extends Controller
                 'status' => 'error',
                 'message' => 'Error al subir imagen'
             );
-
         } else {
             $image_name = time() . $image->getClientOriginalName();
             Storage::disk('users')->put($image_name, File::get($image));
@@ -212,34 +211,35 @@ class UserController extends Controller
         return response()->json($data, $data['code']);
     }
 
-    public function getImage($filename){
+    public function getImage($filename)
+    {
         $isset = Storage::disk('users')->exists($filename);
 
         if ($isset) {
             $file = Storage::disk('users')->get($filename);
             return new Response($file, 200);
-        }else {
+        } else {
             $data = array(
                 'code'   => 404,
                 'status' => 'success',
                 'message'  => 'La imagen no existe.'
             );
 
-            return response()->json($data, $data['code']);  
+            return response()->json($data, $data['code']);
         }
-        
     }
 
-    public function detail($id){
+    public function detail($id)
+    {
         $user = User::find($id);
 
-        if (is_object($user)){
+        if (is_object($user)) {
             $data = array(
                 'code'      => 200,
                 'status'    => 'success',
                 'user'       => $user
             );
-        }else{
+        } else {
             $data = array(
                 'code'      => 404,
                 'status'    => 'error',
