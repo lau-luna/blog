@@ -80,8 +80,6 @@ class CategoryController extends Controller
             ];
         }
 
-
-
         // Devolver el resultado
         return response()->json($data, $data['code']);
     }

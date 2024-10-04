@@ -6,6 +6,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Routing\Controllers\Middleware;
+use App\Helpers\JwtAuth;
 
 class PostController extends Controller
 {   
@@ -41,19 +42,49 @@ class PostController extends Controller
     }
 
     public function store(Request $request){
-        // Obtener datos
+        // Obtener datos por POST
         $json = $request->input('json', null);
+        $params = json_decode($json);
         $params_array = json_decode($json, true);
 
         // Chequear si no está vacío
-        if ($params_array) {
+        if (!empty($params_array)) {
+            // Conseguir usuario identificado
+            $jwtAuth = new JwtAuth();
+            $token = $request->header('Authorization', null);
+            $user = $jwtAuth->checkToken($token, true);
+
             // Validación de datos
             $validate = Validator::make($params_array, [
-                'title'     => 'required',
-                'content'   => 'required',
-                
+                'title'       => 'required',
+                'content'     => 'required',
+                'category_id' => 'required',
+                'image'       => 'required'
             ]);
 
+            if($validate->fails()){
+                $data = [
+                    'code'  => 400,
+                    'status' => 'error',
+                    'message' => 'No se ha guardado el post, faltan datos.'
+                ];
+            }else{
+                // Guardar el artículo
+                $post = new Post();
+                $post->user_id = $user->sub;
+                $post->category_id = $params->category_id;
+                $post->title = $params->title;
+                $post->content = $params->content;
+                $post->image = $params->image;
+
+                $post->save();
+
+                $data = [
+                    'code'      => 200,
+                    'status'    => 'success',
+                    'post'      => $post
+                ];
+            }
         }else{
             $data = [
                 'code'      => 400,
@@ -61,5 +92,8 @@ class PostController extends Controller
                 'message'      => 'No has enviado ningun post.'
             ];
         }
+
+        // Devolver respuesta
+        return response()->json($data, $data['code']);
     }
 }

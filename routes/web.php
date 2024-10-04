@@ -32,7 +32,7 @@ use App\Http\Middleware\ApiAuthMiddleware;
     //  Rutas del controlador de categorias
     Route::middleware([ApiAuthMiddleware::class])->group(function () {
         // Rutas con ApiAuthMiddleware para todas excepto index y show
-        Route::resource('/api/category', CategoryController::class)->except(['index', 'show']);
+        Route::resource('/api/category', CategoryController::class)->except(['index', 'show'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
     });
     // Rutas sin ApiAuthMiddleware para index y show
     Route::get('/api/category', [CategoryController::class, 'index']);
@@ -40,7 +40,7 @@ use App\Http\Middleware\ApiAuthMiddleware;
 
     // Rutas del controlador de entradas
     Route::middleware([ApiAuthMiddleware::class])->group((function () {
-        Route::resource('/api/post', PostController::class)->except(['index', 'show']);
+        Route::resource('/api/post', PostController::class)->except(['index', 'show'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
     }));
     // Rutas sin ApiAuthMiddleware para index y show
     Route::get('/api/post', [PostController::class, 'index']);
