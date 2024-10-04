@@ -31,8 +31,8 @@ use App\Http\Middleware\ApiAuthMiddleware;
 
     
     //  Rutas del controlador de categorias
-    Route::withoutMiddleware([ApiAuthMiddleware::class])->group((function () {
-        Route::resource('/api/category', CategoryController::class);
+    Route::middleware([ApiAuthMiddleware::class])->group((function () {
+        Route::resource('/api/category', CategoryController::class)->withoutMiddleware(['web', 'VerifyCsrfToken']);
     }));
 
 
