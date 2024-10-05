@@ -9,9 +9,10 @@ use Illuminate\Routing\Controllers\Middleware;
 use App\Helpers\JwtAuth;
 
 class PostController extends Controller
-{   
+{
 
-    public function index() {
+    public function index()
+    {
         $posts = Post::all()->load('category');
 
         return response()->json([
@@ -21,16 +22,17 @@ class PostController extends Controller
         ], 200);
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $post = Post::find($id)->load('category');
 
-        if(is_object($post)) {
+        if (is_object($post)) {
             $data = [
                 'code'      => 200,
                 'status'    => 'success',
                 'post'      => $post
             ];
-        }else{
+        } else {
             $data = [
                 'code'      => 404,
                 'status'    => 'error',
@@ -41,7 +43,8 @@ class PostController extends Controller
         return response()->json($data, $data['code']);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         // Obtener datos por POST
         $json = $request->input('json', null);
         $params = json_decode($json);
@@ -62,13 +65,13 @@ class PostController extends Controller
                 'image'       => 'required'
             ]);
 
-            if($validate->fails()){
+            if ($validate->fails()) {
                 $data = [
                     'code'  => 400,
                     'status' => 'error',
                     'message' => 'No se ha guardado el post, faltan datos.'
                 ];
-            }else{
+            } else {
                 // Guardar el artículo
                 $post = new Post();
                 $post->user_id = $user->sub;
@@ -85,7 +88,7 @@ class PostController extends Controller
                     'post'      => $post
                 ];
             }
-        }else{
+        } else {
             $data = [
                 'code'      => 400,
                 'status'    => 'error',
@@ -94,6 +97,53 @@ class PostController extends Controller
         }
 
         // Devolver respuesta
+        return response()->json($data, $data['code']);
+    }
+
+    public function update($id, Request $request)
+    {
+        // Recoger datos por POST
+        $json = $request->input('json', null);
+        $params_array = json_decode($json, true);
+
+        $data = [
+            'code'      => 404,
+            'status'    => 'error',
+            'message'   => 'Datos enviados incorrectos.'
+        ];
+
+        if (!empty($params_array)) {
+            // Validar datos
+            $validate = Validator::make($params_array, [
+                'title'     => 'required',
+                'content'   => 'required',
+                'category_id'     => 'required'
+            ]);
+
+            if ($validate->fails()) {
+                $data['errors'] = $validate->errors();
+                return response()->json($data, $data['code']);
+            }
+
+            // Quitar lo que no quiero actualizar
+            unset($params_array['id']);
+            unset($params_array['category_id']);
+            unset($params_array['user_id']);
+            unset($params_array['user']);
+            unset($params_array['created_at']);
+
+            // Actualizar el artículo
+            $post = Post::where('id', $id)->update($params_array);
+
+            $data = [
+                'code'       => 200,
+                'status'     => 'success',
+                'post'       => $params_array
+            ];
+        }
+
+
+        // Devolver los datos
         return response()->json($data, $data['code']);
     }
 }
