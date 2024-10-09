@@ -46,6 +46,10 @@ use App\Http\Middleware\ApiAuthMiddleware;
     Route::get('/api/post', [PostController::class, 'index']);
     Route::get('/api/post/{id}', [PostController::class, 'show']);
 
+    Route::middleware([ApiAuthMiddleware::class])->group(function () {
+        Route::post('/api/post/upload', [PostController::class, 'upload'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
+    });
+
 Route::get('/', function () {
     return view('welcome');
 });
