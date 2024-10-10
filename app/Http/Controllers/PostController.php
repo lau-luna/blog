@@ -261,4 +261,21 @@ class PostController extends Controller
         }
     }
 
+    public function getPostsByCategory($id) {
+        $posts = Post::where('category_id', $id)->get();
+
+        return response()->json([
+            'status'    => 'success',
+            'posts'     => $posts
+        ], 200);
+    }
+
+    public function getPostsByUser($id) {
+        $posts = Post::where('user_id', $id)->get();
+
+        return response()->json([
+            'status'    => 'success',
+            'posts'     => $posts
+        ], 200);
+    }
 }

@@ -49,6 +49,9 @@ use App\Http\Middleware\ApiAuthMiddleware;
     Route::get('/api/post', [PostController::class, 'index']);
     Route::get('/api/post/{id}', [PostController::class, 'show']);
     Route::get('/api/post/image/{filename}', [PostController::class, 'getImage'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
+    Route::get('/api/post/category/{id}', [PostController::class, 'getPostsByCategory'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
+    Route::get('/api/post/user/{id}', [PostController::class, 'getPostsByUser'])->withoutMiddleware(['web', 'VerifyCsrfToken']);
+
 
 Route::get('/', function () {
     return view('welcome');
