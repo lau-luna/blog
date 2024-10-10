@@ -221,7 +221,7 @@ class UserController extends Controller
         } else {
             $data = array(
                 'code'   => 404,
-                'status' => 'success',
+                'status' => 'error',
                 'message'  => 'La imagen no existe.'
             );
 

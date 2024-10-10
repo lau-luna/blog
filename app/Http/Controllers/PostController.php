@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Helpers\JwtAuth;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -238,4 +239,26 @@ class PostController extends Controller
         // Devolver datos
         return response()->json($data, $data['code']);
     }
+
+    public function getImage($filename){
+        // Comprobar si existe el fichero
+        $isset = Storage::disk('images')->exists($filename);
+
+        if ($isset) {
+            // Conseguir la imagen
+            $file = Storage::disk('images')->get($filename);
+            // Devolver la imagen
+            return new Response($file, 200);
+        }else{
+            // Mostrar Error
+            $data = [
+                'code'      => 404,
+                'status'    => 'error',
+                'message'   => 'La imagen no existe.'
+            ];
+
+            return response()->json($data, $data['code']);
+        }
+    }
+
 }
